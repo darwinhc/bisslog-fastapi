@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools", "setuptools_scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bisslog_fastapi"
+dynamic = ["version"]
+description = "Framework-agnostic adapter for Bisslog. Connects external interfaces to use cases while keeping domain logic isolated and pure."
+readme = "README.md"
+authors = [
+    {name = "Darwin Stiven Herrera Cartagena", email = "darwinsherrerac@gmail.com"}
+]
+requires-python = ">=3.8"  # fastapi supports >= 3.8
+dependencies = [
+    "bisslog>=0.0.9",
+    "bisslog-schema>=0.0.10",
+    "fastapi"
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent"
+]
+keywords = ["hexagonal", "adapters", "bisslog", "fastapi"]
+
+[project.urls]
+Homepage = "https://github.com/darwinhc/bisslog-fastapi"
+
+
+[project.scripts]
+bisslog_fastapi = "bisslog_fastapi.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["bisslog_fastapi", "bisslog_fastapi.*"]
+
+[tool.setuptools_scm]
+version_scheme = "post-release"
+local_scheme = "no-local-version"
