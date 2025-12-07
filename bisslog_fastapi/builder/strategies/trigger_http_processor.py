@@ -1,5 +1,7 @@
-from typing import Callable, Any, Optional
+"""Processor for HTTP triggers definition"""
+
 import re
+from typing import Callable, Any, Optional
 
 from bisslog_schema.schema import TriggerHttp
 from bisslog_schema.use_case_code_inspector.use_case_code_metadata import UseCaseCodeInfo
@@ -65,7 +67,6 @@ class TriggerHttpProcessor(TriggerProcessor):
                 )
                 uc_arg_names.append((dst, src))
 
-            # BODY COMPLETO (body)
             if "body" in mapper:
                 dst = mapper["body"]
                 ann = get_param_type(callable_obj, dst)
@@ -82,7 +83,6 @@ class TriggerHttpProcessor(TriggerProcessor):
                 )
                 uc_arg_names.append((dst, dst))
 
-            # BODY CAMPOS (body.<field>)
             for source_key, dst in sorted(
                     (k, v) for k, v in mapper.items()
                     if k.startswith("body.") and k != "body"
@@ -98,7 +98,6 @@ class TriggerHttpProcessor(TriggerProcessor):
                 )
                 uc_arg_names.append((dst, field))
 
-            # QUERY COMO DICT (params)
             if "params" in mapper:
                 dst = mapper["params"]
                 ann = get_param_type(callable_obj, dst)
@@ -115,7 +114,6 @@ class TriggerHttpProcessor(TriggerProcessor):
                 )
                 uc_arg_names.append((dst, dst))
 
-            # QUERY CAMPOS (params.<name>)
             for source_key, dst in sorted(
                     (k, v) for k, v in mapper.items()
                     if k.startswith("params.") and k != "params"
@@ -131,7 +129,6 @@ class TriggerHttpProcessor(TriggerProcessor):
                 )
                 uc_arg_names.append((dst, field))
 
-            # HEADERS COMO DICT (headers)
             if "headers" in mapper:
                 dst = mapper["headers"]
                 ann = get_param_type(callable_obj, dst)
@@ -148,7 +145,6 @@ class TriggerHttpProcessor(TriggerProcessor):
                 )
                 uc_arg_names.append((dst, dst))
 
-            # HEADERS CAMPOS (headers.<name>)
             for source_key, dst in sorted(
                     (k, v) for k, v in mapper.items()
                     if k.startswith("headers.") and k != "headers"
@@ -176,12 +172,10 @@ class TriggerHttpProcessor(TriggerProcessor):
             imports.setdefault("fastapi", set()).add("Body")
             sig_params.append("body: Dict[str, Any] = Body(default={})")
             imports.setdefault("typing", set()).update({"Dict", "Any"})
-            # Query params como dict
             imports.setdefault("fastapi", set()).add("Depends")
             sig_params.append(
                 "query_params: Dict[str, Any] = Depends(_all_query_params)"
             )
-            # Headers como dict
             sig_params.append(
                 "headers: Dict[str, str] = Depends(_all_headers)"
             )
@@ -221,15 +215,11 @@ class TriggerHttpProcessor(TriggerProcessor):
             path_param_names = self._extract_path_param_names_from_path(path)
             for p_name in path_param_names:
                 lines.append(f'    _kwargs["{p_name}"] = {p_name}')
-            # Body dict
             lines.append("    if isinstance(body, dict):")
             lines.append("        _kwargs.update(body)")
-            # Query params dict
             lines.append("    _kwargs.update(query_params)")
-            # Headers dict
             lines.append("    _kwargs.update(headers)")
 
-        # Llamada al use case
         if uc_info.is_coroutine:
             lines.append(f"    result = await {uc_var_name}(**_kwargs)")
         else:

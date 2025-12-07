@@ -1,3 +1,5 @@
+"""Trigger processor base class definition."""
+
 from abc import ABC, abstractmethod
 from typing import Union, Any, Callable, Optional
 
@@ -26,4 +28,3 @@ class TriggerProcessor(ABC):
         The handler is declared as `async def` if the use case callable
         is coroutine, otherwise as a synchronous `def`."""
         raise NotImplementedError
-

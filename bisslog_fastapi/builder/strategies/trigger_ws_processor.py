@@ -1,3 +1,5 @@
+"""Processor for WebSocket triggers definition"""
+
 from typing import Any, Callable, Optional
 
 from bisslog_schema.schema import TriggerWebsocket

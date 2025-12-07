@@ -36,7 +36,6 @@ class BisslogFastAPIWebSocketResolver(BisslogFastApiResolver):
       ``body``, and ``headers``.
     """
 
-
     def __call__(
         self,
         app: FastAPI,
