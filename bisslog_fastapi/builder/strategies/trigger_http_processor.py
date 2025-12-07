@@ -6,11 +6,11 @@ from typing import Callable, Any, Optional
 from bisslog_schema.schema import TriggerHttp
 from bisslog_schema.use_case_code_inspector.use_case_code_metadata import UseCaseCodeInfo
 
-from bisslog_fastapi.builder.static_python_construct_data import StaticPythonConstructData
-from bisslog_fastapi.builder.strategies.trigger_processor import TriggerProcessor
-from bisslog_fastapi.utils.get_param_type import get_param_type
-from bisslog_fastapi.utils.infer_response_model import infer_response_model
-from bisslog_fastapi.utils.type_to_str_and_imports import type_to_str_and_imports
+from ..static_python_construct_data import StaticPythonConstructData
+from .trigger_processor import TriggerProcessor
+from ...utils.get_param_type import get_param_type
+from ...utils.infer_response_model import infer_response_model
+from ...utils.type_to_str_and_imports import type_to_str_and_imports
 
 
 class TriggerHttpProcessor(TriggerProcessor):
