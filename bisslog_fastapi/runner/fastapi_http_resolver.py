@@ -303,7 +303,8 @@ class BisslogFastAPIHttpResolver(BisslogFastApiResolver):
         app.add_api_route(
             path,
             endpoint,
-            name=f"{use_case_info.keyname} {path} {trigger.options.method.upper()}",
+            name=f"{use_case_info.keyname} {path} "
+                 f"{trigger.options.method.upper()} {trigger.options.apigw}",
             summary=use_case_info.name.lower().capitalize(),
             description=use_case_info.description,
             methods=[trigger.options.method.upper()],
