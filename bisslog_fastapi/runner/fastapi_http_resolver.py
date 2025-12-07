@@ -12,7 +12,7 @@ import inspect
 from copy import deepcopy
 from json import JSONDecodeError
 from typing import (
-    Callable, Optional, Dict, Union, Awaitable, Any, Mapping
+    Callable, Optional, Dict, Union, Awaitable, Any, Mapping, List
 )
 
 from bisslog.utils.mapping import Mapper
@@ -62,7 +62,7 @@ class BisslogFastAPIHttpResolver(BisslogFastApiResolver):
         resp.headers["Access-Control-Allow-Credentials"] = "true"
 
     @staticmethod
-    def _extract_mapper_path_query_vars(mapper: Optional[Mapper]) -> list[str]:
+    def _extract_mapper_path_query_vars(mapper: Optional[Mapper]) -> "List[str]":
         """Collect variables mapped from 'path_query.<name>'."""
         if not mapper:
             return []
@@ -284,10 +284,6 @@ class BisslogFastAPIHttpResolver(BisslogFastApiResolver):
             Trigger configuration. Only HTTP triggers are processed.
         use_case_function : Callable
             The use case callable to expose over HTTP. It may be sync or async.
-
-        Returns
-        -------
-        None
         """
         if not isinstance(trigger.options, TriggerHttp):
             return
@@ -307,7 +303,8 @@ class BisslogFastAPIHttpResolver(BisslogFastApiResolver):
         app.add_api_route(
             path,
             endpoint,
-            name=f"{use_case_info.keyname} {path} {trigger.options.method.upper()}",
+            name=f"{use_case_info.keyname} {path} "
+                 f"{trigger.options.method.upper()} {trigger.options.apigw}",
             summary=use_case_info.name.lower().capitalize(),
             description=use_case_info.description,
             methods=[trigger.options.method.upper()],

@@ -5,7 +5,10 @@ These tests validate the conversion of different kinds of Python type
 annotations into string representations and the associated import map.
 """
 
+import sys
 import typing as t
+import pytest
+from typing import List, Dict, Set
 
 from bisslog_fastapi.utils.type_to_str_and_imports import type_to_str_and_imports
 
@@ -79,6 +82,7 @@ def test_typing_optional_str():
     assert "Union" in imports["typing"]
 
 
+@pytest.mark.skipif(sys.version_info < (3, 9), reason="PEP 585 requires Python 3.9+")
 def test_pep585_list_int_normalized_to_typing_list():
     """Test that list[int] (PEP 585) is normalized to List[int] with typing import."""
     annotation = list[int]
@@ -89,6 +93,17 @@ def test_pep585_list_int_normalized_to_typing_list():
     assert imports == {"typing": {"List"}}
 
 
+def test_list_int_normalized_to_typing_list():
+    """Test that List[int]"""
+    annotation = List[int]
+
+    type_str, imports = type_to_str_and_imports(annotation)
+
+    assert type_str == "List[int]"
+    assert imports == {"typing": {"List"}}
+
+
+@pytest.mark.skipif(sys.version_info < (3, 9), reason="PEP 585 requires Python 3.9+")
 def test_pep585_dict_str_int_normalized_to_typing_dict():
     """Test that dict[str, int] (PEP 585) is normalized to Dict[str, int]."""
     annotation = dict[str, int]
@@ -99,6 +114,17 @@ def test_pep585_dict_str_int_normalized_to_typing_dict():
     assert imports == {"typing": {"Dict"}}
 
 
+def test_dict_str_int_to_typing_dict():
+    """Test that Dict[str, int]."""
+    annotation = Dict[str, int]
+
+    type_str, imports = type_to_str_and_imports(annotation)
+
+    assert type_str == "Dict[str, int]"
+    assert imports == {"typing": {"Dict"}}
+
+
+@pytest.mark.skipif(sys.version_info < (3, 9), reason="PEP 585 requires Python 3.9+")
 def test_pep585_set_str_normalized_to_typing_set():
     """Test that set[str] (PEP 585) is normalized to Set[str]."""
     annotation = set[str]
@@ -109,6 +135,17 @@ def test_pep585_set_str_normalized_to_typing_set():
     assert imports == {"typing": {"Set"}}
 
 
+def test_set_str():
+    """Test that Set[str]."""
+    annotation = Set[str]
+
+    type_str, imports = type_to_str_and_imports(annotation)
+
+    assert type_str == "Set[str]"
+    assert imports == {"typing": {"Set"}}
+
+
+@pytest.mark.skipif(sys.version_info < (3, 9), reason="PEP 585 requires Python 3.9+")
 def test_nested_pep585_generics_and_user_defined_class():
     """Test nested generics and user-defined types with import merging.    The annotation list[dict[str, Foo]] should be normalized to
     List[Dict[str, Foo]] and produce imports for typing.List, typing.Dict,
@@ -122,6 +159,30 @@ def test_nested_pep585_generics_and_user_defined_class():
             pass
 
     annotation = list[dict[str, Foo]]
+
+    type_str, imports = type_to_str_and_imports(annotation)
+
+    assert type_str == "List[Dict[str, Foo]]"
+
+    assert "typing" in imports
+    assert "List" in imports["typing"]
+    assert "Dict" in imports["typing"]
+
+    foo_module = Foo.__module__
+    assert foo_module in imports
+    assert "Foo" in imports[foo_module]
+
+
+def test_nested_generics_and_user_defined_class():
+    """Test nested generics and user-defined types with import merging."""
+
+    class Foo:
+        """Dummy class for testing user-defined type imports."""
+
+        def __init__(self) -> None:
+            pass
+
+    annotation = List[Dict[str, Foo]]
 
     type_str, imports = type_to_str_and_imports(annotation)
 
