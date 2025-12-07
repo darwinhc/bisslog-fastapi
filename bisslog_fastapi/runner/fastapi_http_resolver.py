@@ -284,10 +284,6 @@ class BisslogFastAPIHttpResolver(BisslogFastApiResolver):
             Trigger configuration. Only HTTP triggers are processed.
         use_case_function : Callable
             The use case callable to expose over HTTP. It may be sync or async.
-
-        Returns
-        -------
-        None
         """
         if not isinstance(trigger.options, TriggerHttp):
             return
