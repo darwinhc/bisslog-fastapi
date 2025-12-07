@@ -12,7 +12,7 @@ import inspect
 from copy import deepcopy
 from json import JSONDecodeError
 from typing import (
-    Callable, Optional, Dict, Union, Awaitable, Any, Mapping
+    Callable, Optional, Dict, Union, Awaitable, Any, Mapping, List
 )
 
 from bisslog.utils.mapping import Mapper
@@ -62,7 +62,7 @@ class BisslogFastAPIHttpResolver(BisslogFastApiResolver):
         resp.headers["Access-Control-Allow-Credentials"] = "true"
 
     @staticmethod
-    def _extract_mapper_path_query_vars(mapper: Optional[Mapper]) -> list[str]:
+    def _extract_mapper_path_query_vars(mapper: Optional[Mapper]) -> "List[str]":
         """Collect variables mapped from 'path_query.<name>'."""
         if not mapper:
             return []

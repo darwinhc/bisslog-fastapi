@@ -1,10 +1,10 @@
 """Type to string and imports."""
 
 import re
-from typing import Any
+from typing import Any, Tuple, Dict, Set
 
 
-def type_to_str_and_imports(annotation: Any) -> tuple[str, dict[str, set[str]]]:
+def type_to_str_and_imports(annotation: Any) -> Tuple[str, Dict[str, Set[str]]]:
     """
     Converts a type annotation object into a string suitable for source code
     and a mapping of modules to symbols that must be imported.
@@ -25,14 +25,14 @@ def type_to_str_and_imports(annotation: Any) -> tuple[str, dict[str, set[str]]]:
         - The type as a Python-syntax string.
         - A dict of imports (module -> set(symbols)).
     """
-    imports: dict[str, set[str]] = {}
+    imports: Dict[str, Set[str]] = {}
 
     if annotation is None:
         return "Any", {"typing": {"Any"}}
 
     if annotation is type(None):
         return "None", {}
-
+    
     if getattr(annotation, "__origin__", None):
         return _get_type_by_origin(annotation)
 
@@ -59,7 +59,7 @@ def type_to_str_and_imports(annotation: Any) -> tuple[str, dict[str, set[str]]]:
 
 def _get_type_by_origin(annotation: Any) -> Any:
     """Return a string representation of a type originated from typing.Generic."""
-    imports: dict[str, set[str]] = {}
+    imports: Dict[str, Set[str]] = {}
     origin = getattr(annotation, "__origin__")
     origin_name = getattr(origin, "__name__", None) or str(origin)
     origin_name = origin_name.replace("typing.", "")

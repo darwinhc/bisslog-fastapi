@@ -1,7 +1,7 @@
 """Processor for HTTP triggers definition"""
 
 import re
-from typing import Callable, Any, Optional
+from typing import Callable, Any, Optional, List, Tuple
 
 from bisslog_schema.schema import TriggerHttp
 from bisslog_schema.use_case_code_inspector.use_case_code_metadata import UseCaseCodeInfo
@@ -17,7 +17,7 @@ class TriggerHttpProcessor(TriggerProcessor):
     """Processor for HTTP triggers."""
 
     @staticmethod
-    def _extract_path_param_names_from_path(path: str) -> tuple[str, ...]:
+    def _extract_path_param_names_from_path(path: str) -> Tuple[str, ...]:
         """
         Extracts path parameter names from a FastAPI-style path, e.g.:
 
@@ -95,9 +95,9 @@ class TriggerHttpProcessor(TriggerProcessor):
 
     def _process_mapper(
             self, mapper: dict, callable_obj: Callable, imports: dict
-    ) -> tuple[list[str], list[tuple[str, str]]]:
-        sig_params: list[str] = []
-        uc_arg_names: list[tuple[str, str]] = []
+    ) -> Tuple[List[str], List[Tuple[str, str]]]:
+        sig_params: List[str] = []
+        uc_arg_names: List[Tuple[str, str]] = []
 
         # Path Params
         imports.setdefault("fastapi", set()).add("Depends")
@@ -195,8 +195,8 @@ class TriggerHttpProcessor(TriggerProcessor):
 
     def _process_default(
             self, path: str, callable_obj: Callable, imports: dict
-    ) -> tuple[list[str], list[tuple[str, str]]]:
-        sig_params: list[str] = []
+    ) -> Tuple[List[str], List[Tuple[str, str]]]:
+        sig_params: List[str] = []
 
         path_param_names = self._extract_path_param_names_from_path(path)
         for p_name in path_param_names:
@@ -218,8 +218,8 @@ class TriggerHttpProcessor(TriggerProcessor):
 
     def _build_handler_body(
             self, uc_var_name: str, is_coroutine: bool,
-            uc_arg_names: list[tuple[str, str]], has_mapper: bool, path: str
-    ) -> list[str]:
+            uc_arg_names: List[Tuple[str, str]], has_mapper: bool, path: str
+    ) -> List[str]:
         lines = ["    _kwargs: Dict[str, Any] = {}"]
 
         if has_mapper:
