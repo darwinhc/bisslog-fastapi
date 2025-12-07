@@ -31,7 +31,7 @@ def test_http_resolver_registers_route(http_resolver, mock_app):
     trigger_opt = TriggerHttp(path="/items", method="POST")
     trigger = TriggerInfo(type="http", keyname="t1", options=trigger_opt)
 
-    use_case_info = UseCaseInfo(name="CreateItem", description="Creates an item",
+    use_case_info = UseCaseInfo(name="create Item", description="Creates an item",
                                 triggers=[trigger])
     use_case_callable = lambda: "created"
 
@@ -53,7 +53,8 @@ def test_http_resolver_registers_route(http_resolver, mock_app):
 
     call_kwargs = call_args[1]
     assert call_kwargs["methods"] == ["POST"]
-    assert call_kwargs["summary"] == "Creates an item"
+    assert call_kwargs["summary"] == "Create item"
+    assert call_kwargs["description"] == "Creates an item"
     # The endpoint should be a function wrapping the use_case_callable
     assert callable(call_args[0][1])
 
