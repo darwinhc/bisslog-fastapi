@@ -308,7 +308,8 @@ class BisslogFastAPIHttpResolver(BisslogFastApiResolver):
             path,
             endpoint,
             name=f"{use_case_info.keyname} {path} {trigger.options.method.upper()}",
-            summary=use_case_info.description,
+            summary=use_case_info.name.lower().capitalize(),
+            description=use_case_info.description,
             methods=[trigger.options.method.upper()],
             response_model=response_model,
         )
