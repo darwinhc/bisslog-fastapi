@@ -30,19 +30,8 @@ def type_to_str_and_imports(annotation: Any) -> tuple[str, dict[str, set[str]]]:
     if annotation is None:
         return "Any", {"typing": {"Any"}}
 
-    module = getattr(annotation, "__module__", None)
-    name = getattr(annotation, "__name__", None)
-
-    if module == "builtins" and name is not None:
-        return name, imports
-
-    if module == "typing":
-        s = str(annotation)
-        s_clean = s.replace("typing.", "")
-        tokens = set(re.findall(r"\b([A-Z][A-Za-z0-9_]+)\b", s_clean))
-        if tokens:
-            imports["typing"] = tokens
-        return s_clean, imports
+    if annotation is type(None):
+        return "None", {}
 
     origin = getattr(annotation, "__origin__", None)
     if origin is not None:
@@ -67,6 +56,20 @@ def type_to_str_and_imports(annotation: Any) -> tuple[str, dict[str, set[str]]]:
 
         imports.setdefault("typing", set()).add(origin_name)
         return f"{origin_name}[{', '.join(args_str_parts)}]", imports
+
+    module = getattr(annotation, "__module__", None)
+    name = getattr(annotation, "__name__", None)
+
+    if module == "builtins" and name is not None:
+        return name, imports
+
+    if module == "typing":
+        s = str(annotation)
+        s_clean = s.replace("typing.", "")
+        tokens = set(re.findall(r"\b([A-Z][A-Za-z0-9_]+)\b", s_clean))
+        if tokens:
+            imports["typing"] = tokens
+        return s_clean, imports
 
     if module and name:
         imports[module] = {name}
