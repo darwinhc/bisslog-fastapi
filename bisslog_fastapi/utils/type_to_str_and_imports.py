@@ -62,6 +62,7 @@ def _get_type_by_origin(annotation: Any) -> Any:
     imports: dict[str, set[str]] = {}
     origin = getattr(annotation, "__origin__")
     origin_name = getattr(origin, "__name__", None) or str(origin)
+    origin_name = origin_name.replace("typing.", "")
     args = getattr(annotation, "__args__", ())
     args_str_parts = []
     for arg in args:
