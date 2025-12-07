@@ -32,6 +32,9 @@ bisslog_fastapi = "bisslog_fastapi.cli:main"
 [tool.setuptools.packages.find]
 include = ["bisslog_fastapi", "bisslog_fastapi.*"]
 
+[tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "function"
+
 [tool.setuptools_scm]
 version_scheme = "post-release"
 local_scheme = "no-local-version"
