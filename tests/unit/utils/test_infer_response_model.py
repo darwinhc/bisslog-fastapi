@@ -1,4 +1,3 @@
-
 from dataclasses import dataclass as std_dataclass, is_dataclass
 from typing import Any, Union, List, Dict, get_origin, get_args
 
@@ -15,6 +14,7 @@ class UserModel(BaseModel):
 
 class CustomResponse(Response):
     pass
+
 
 def test_safe_type_hints_function_ok():
     def fn(x: int) -> str:
