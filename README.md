@@ -1,6 +1,6 @@
 # bisslog-fastapi
 
-![PyPI - Version](https://img.shields.io/pypi/v/bisslog-fastapi?style=flat-square&color=blue)
+[![PyPI](https://img.shields.io/pypi/v/bisslog-fastapi)](https://pypi.org/project/bisslog-fastapi/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 **Framework-agnostic adapter for Bisslog.**
