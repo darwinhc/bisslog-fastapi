@@ -1,4 +1,6 @@
+import sys
 from dataclasses import dataclass as std_dataclass, is_dataclass
+import pytest
 from typing import Any, Union, List, Dict, get_origin, get_args
 
 from pydantic import BaseModel
@@ -89,26 +91,30 @@ def test_is_disallowed_return_normal_type():
 
 def test_collection_returns_model_for_list_tuple_set_of_model():
     assert infer_response_model._collection_returns_model(List[UserModel]) is True
-    assert infer_response_model._collection_returns_model(list[UserModel]) is True
-    assert infer_response_model._collection_returns_model(tuple[UserModel]) is True
-    assert infer_response_model._collection_returns_model(set[UserModel]) is True
+    if sys.version_info >= (3, 9):
+        assert infer_response_model._collection_returns_model(list[UserModel]) is True
+        assert infer_response_model._collection_returns_model(tuple[UserModel]) is True
+        assert infer_response_model._collection_returns_model(set[UserModel]) is True
 
 
 def test_collection_returns_model_for_non_model_inner_type():
     assert infer_response_model._collection_returns_model(List[int]) is False
-    assert infer_response_model._collection_returns_model(list[int]) is False
+    if sys.version_info >= (3, 9):
+        assert infer_response_model._collection_returns_model(list[int]) is False
 
 
 def test_collection_returns_model_for_dict_str_to_model():
     assert infer_response_model._collection_returns_model(Dict[str, UserModel]) is True
-    assert infer_response_model._collection_returns_model(dict[str, UserModel]) is True
+    if sys.version_info >= (3, 9):
+        assert infer_response_model._collection_returns_model(dict[str, UserModel]) is True
 
 
 def test_collection_returns_model_for_dict_non_str_key_or_value_not_model():
     assert infer_response_model._collection_returns_model(Dict[int, UserModel]) is False
     assert infer_response_model._collection_returns_model(Dict[str, int]) is False
-    assert infer_response_model._collection_returns_model(dict[int, UserModel]) is False
-    assert infer_response_model._collection_returns_model(dict[str, int]) is False
+    if sys.version_info >= (3, 9):
+        assert infer_response_model._collection_returns_model(dict[int, UserModel]) is False
+        assert infer_response_model._collection_returns_model(dict[str, int]) is False
 
 
 @std_dataclass
@@ -143,6 +149,7 @@ def test_infer_response_model_with_basemodel_return():
     assert infer_response_model.infer_response_model(fn) is UserModel
 
 
+@pytest.mark.skipif(sys.version_info < (3, 9), reason="PEP 585 requires Python 3.9+")
 def test_infer_response_model_with_list_of_basemodel():
     def fn() -> list[UserModel]:
         return []
@@ -152,6 +159,7 @@ def test_infer_response_model_with_list_of_basemodel():
     assert get_args(ret) == (UserModel,)
 
 
+@pytest.mark.skipif(sys.version_info < (3, 9), reason="PEP 585 requires Python 3.9+")
 def test_infer_response_model_with_dict_str_to_basemodel():
     def fn() -> dict[str, UserModel]:
         return {}

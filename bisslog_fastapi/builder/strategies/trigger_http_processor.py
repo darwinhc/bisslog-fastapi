@@ -1,7 +1,7 @@
 """Processor for HTTP triggers definition"""
 
 import re
-from typing import Callable, Any, Optional, List, Tuple
+from typing import Callable, Any, Optional, List, Tuple, Dict, Set
 
 from bisslog_schema.schema import TriggerHttp
 from bisslog_schema.use_case_code_inspector.use_case_code_metadata import UseCaseCodeInfo
@@ -32,7 +32,7 @@ class TriggerHttpProcessor(TriggerProcessor):
     ) -> StaticPythonConstructData:
         """Generates a FastAPI route handler for an HTTP trigger."""
         mapper = trigger_info.mapper or {}
-        imports: dict[str, set[str]] = {}
+        imports: Dict[str, Set[str]] = {}
 
         path = trigger_info.path or f"/{use_case_key}"
         method = (trigger_info.method or "GET").upper()
@@ -78,7 +78,7 @@ class TriggerHttpProcessor(TriggerProcessor):
     @staticmethod
     def _create_handler_signature(
         key: str, identifier: int, uc_info: UseCaseCodeInfo,
-        callable_obj: Callable, sig_params: list[str], imports: dict
+        callable_obj: Callable, sig_params: List[str], imports: dict
     ) -> str:
         handler_name = f"{key}_handler_{identifier}"
         def_or_async = "async def" if uc_info.is_coroutine else "def"
