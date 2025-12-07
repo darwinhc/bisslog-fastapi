@@ -6,21 +6,19 @@ use case callable resolution, path parameter extraction, and the top-level
 __call__ orchestration semantics.
 """
 
-from types import ModuleType, SimpleNamespace
 import sys
+from types import ModuleType, SimpleNamespace
 
 import pytest
-from bisslog_schema.schema import TriggerHttp, TriggerInfo, UseCaseInfo, ServiceInfo, \
+from bisslog_schema.schema import TriggerInfo, UseCaseInfo, ServiceInfo, \
     TriggerWebsocket
-from bisslog_schema.schema.triggers.trigger_options import TriggerOptions
 from bisslog_schema.service_metadata_with_code import ServiceInfoWithCode
-
-from bisslog_fastapi.builder import builder_fastapi_app_manager
-from bisslog_fastapi.builder.static_python_construct_data import StaticPythonConstructData
 from bisslog_schema.use_case_code_inspector.use_case_code_metadata import (
     UseCaseCodeInfoClass, UseCaseCodeInfoObject,
 )
 
+from bisslog_fastapi.builder import builder_fastapi_app_manager
+from bisslog_fastapi.builder.static_python_construct_data import StaticPythonConstructData
 from bisslog_fastapi.builder.strategies.trigger_http_processor import TriggerHttpProcessor
 from bisslog_fastapi.builder.strategies.trigger_ws_processor import TriggerWebsocketProcessor
 
@@ -37,8 +35,8 @@ def builder():
 
     builder_instance = builder_fastapi_app_manager.BuilderFastAPIAppManager(
         eager_importer=eager_importer,
-        trigger_http_processor = TriggerHttpProcessor(),
-        trigger_ws_processor = TriggerWebsocketProcessor(),
+        trigger_http_processor=TriggerHttpProcessor(),
+        trigger_ws_processor=TriggerWebsocketProcessor(),
     )
     builder_instance._eager_calls = calls  # test-only hook
     return builder_instance
@@ -414,8 +412,8 @@ def test_call_without_triggers_generates_basic_fastapi_app(monkeypatch):
 
     builder_instance = builder_fastapi_app_manager.BuilderFastAPIAppManager(
         eager_importer=lambda _: None,
-        trigger_http_processor = TriggerHttpProcessor(),
-        trigger_ws_processor = TriggerWebsocketProcessor(),
+        trigger_http_processor=TriggerHttpProcessor(),
+        trigger_ws_processor=TriggerWebsocketProcessor(),
     )
 
     result = builder_instance()
