@@ -1,8 +1,7 @@
 # bisslog-fastapi
 
 ![PyPI - Version](https://img.shields.io/pypi/v/bisslog-fastapi?style=flat-square&color=blue)
-![Tests](https://img.shields.io/badge/tests-passing-success?style=flat-square&logo=github-actions)
-![License](https://img.shields.io/pypi/l/bisslog-fastapi?style=flat-square)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 **Framework-agnostic adapter for Bisslog.**
 Connects external interfaces to use cases while keeping domain logic isolated and pure.
