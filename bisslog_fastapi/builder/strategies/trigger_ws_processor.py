@@ -5,8 +5,8 @@ from typing import Any, Callable, Optional
 from bisslog_schema.schema import TriggerWebsocket
 from bisslog_schema.use_case_code_inspector.use_case_code_metadata import UseCaseCodeInfo
 
-from bisslog_fastapi.builder.static_python_construct_data import StaticPythonConstructData
-from bisslog_fastapi.builder.strategies.trigger_processor import TriggerProcessor
+from ..static_python_construct_data import StaticPythonConstructData
+from .trigger_processor import TriggerProcessor
 
 
 class TriggerWebsocketProcessor(TriggerProcessor):

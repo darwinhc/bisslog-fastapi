@@ -10,7 +10,7 @@ from typing import Optional
 
 import uvicorn
 
-from bisslog_fastapi import BisslogFastAPI
+from ...runner.init_fastapi_app import BisslogFastAPI
 
 
 def run(

@@ -26,6 +26,16 @@ def _get_return_annotation(fn) -> Optional[type]:
     return hints.get("return")
 
 
+def _is_disallowed_return_union(args):
+    """Return True if any of the args is a disallowed return type."""
+    for arg in args:
+        if arg is Any or arg is type(None):
+            return True
+        if isinstance(arg, type) and issubclass(arg, Response):
+            return True
+    return True
+
+
 def _is_disallowed_return(ret: type) -> bool:
     """
     Return True if this annotation should NOT produce a response_model.
@@ -45,12 +55,7 @@ def _is_disallowed_return(ret: type) -> bool:
     args = get_args(ret)
 
     if origin is Union:
-        for arg in args:
-            if arg is Any or arg is type(None):
-                return True
-            if isinstance(arg, type) and issubclass(arg, Response):
-                return True
-        return True
+        return _is_disallowed_return_union(args)
 
     return False
 

@@ -7,8 +7,6 @@
 **Framework-agnostic adapter for Bisslog.**
 Connects external interfaces to use cases while keeping domain logic isolated and pure.
 
-## Introduction
-
 `bisslog-fastapi` is the **FastAPI adapter** for the Bisslog hexagonal architecture framework. It allows you to expose your core business logic (Use Cases) as HTTP/WebSocket endpoints automatically, preserving the Clean Architecture principles.
 
 It acts as a bridge:

@@ -6,7 +6,7 @@ from typing import Union, Any, Callable, Optional
 from bisslog_schema.schema import TriggerHttp, TriggerWebsocket
 from bisslog_schema.use_case_code_inspector.use_case_code_metadata import UseCaseCodeInfo
 
-from bisslog_fastapi.builder.static_python_construct_data import StaticPythonConstructData
+from ..static_python_construct_data import StaticPythonConstructData
 
 
 class TriggerProcessor(ABC):
