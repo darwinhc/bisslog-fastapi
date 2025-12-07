@@ -2,6 +2,8 @@
 import re
 
 
-def extract_path_vars(path: str) -> list[str]:
+from typing import List
+
+def extract_path_vars(path: str) -> List[str]:
     """Extract {vars} from a FastAPI path pattern."""
     return re.findall(r"{([a-zA-Z_][a-zA-Z0-9_]*)}", path or "")
